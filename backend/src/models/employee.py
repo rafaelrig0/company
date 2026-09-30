@@ -1,6 +1,6 @@
 import enum
 from decimal import Decimal
-from lib.database import Base
+from ..lib.database import Base
 from sqlalchemy.orm import validates, Mapped, mapped_column, relationship
 from sqlalchemy import Integer, DECIMAL, String, Enum, ForeignKey
 
@@ -40,6 +40,8 @@ class Employee(Base):
     password_hash: Mapped[str] = mapped_column(String(150), nullable=False)
 
     salary: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), nullable=False)
+
+    department: Mapped[str] = mapped_column(String(100), nullable=False)
     
 class Phones(Base):
     __tablename__ = "phones"
