@@ -1,7 +1,8 @@
 import enum
+from decimal import Decimal
 from lib.database import Base
 from sqlalchemy.orm import validates, Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, Enum, ForeignKey
+from sqlalchemy import Integer, DECIMAL, String, Enum, ForeignKey
 
 class Role(enum.IntEnum):
     EMPLOYEE = 1
@@ -20,12 +21,12 @@ class Employee(Base):
             raise ValueError("Invalid email!")
         return value
     
-    phone: Mapped[list["Phones"]] = relationship(
+    phones: Mapped[list["Phones"]] = relationship(
         back_populates="employee", cascade="all, delete-orphan"
     )
 
     manager_id: Mapped[int | None] = mapped_column(
-        ForeignKey("employees.id", ondelete="SET NULL"), nullable=True
+        ForeignKey("employee.employee_id", ondelete="SET NULL"), nullable=True
     )
     manager: Mapped["Employee | None "] = relationship(
         back_populates="subordinates", remote_side=[employee_id]
@@ -36,8 +37,10 @@ class Employee(Base):
     role: Mapped[Role] = mapped_column(
         Enum(Role, name="role"), nullable=False, default=Role.EMPLOYEE
     )
-
     password_hash: Mapped[str] = mapped_column(String(150), nullable=False)
+
+    salary: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), nullable=False)
+    
 class Phones(Base):
     __tablename__ = "phones"
 
