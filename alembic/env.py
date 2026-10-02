@@ -20,7 +20,6 @@ if config.config_file_name is not None:
 
 # Rewrites the sqlalchemy.url line in the .ini file
 config.set_main_option("sqlalchemy.url", DATABASE_URL.render_as_string(hide_password=False).replace("%", "%%"),)
-print("ALEMBIC USER:", DATABASE_URL.username, "| DB:", DATABASE_URL.database)
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel

@@ -1,25 +1,20 @@
 import enum
 from decimal import Decimal
 from ..lib.database import Base
-from sqlalchemy.orm import validates, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, DECIMAL, String, Enum, ForeignKey
 
-class Role(enum.IntEnum):
-    EMPLOYEE = 1
-    LEADER = 2
-    DIRECTOR = 3
+class Role(str, enum.Enum):
+    EMPLOYEE = "employee"
+    LEADER = "leader"
+    DIRECTOR = "director"
 
 class Employee(Base):
     __tablename__ = "employee"
 
-    employee_id: Mapped[int] = mapped_column(Integer, primary_key=True, nullable=False)
+    employee_id: Mapped[int] = mapped_column(Integer, primary_key=True)
     fullname: Mapped[str] = mapped_column(String(120), nullable=False)
     email: Mapped[str] = mapped_column(String(120), nullable=False, unique=True)
-    @validates("email")
-    def validate_email(self, key, value):
-        if "@" not in value or "." not in value.split("@")[-1]:
-            raise ValueError("Invalid email!")
-        return value
     
     phones: Mapped[list["Phones"]] = relationship(
         back_populates="employee", cascade="all, delete-orphan"
@@ -28,7 +23,7 @@ class Employee(Base):
     manager_id: Mapped[int | None] = mapped_column(
         ForeignKey("employee.employee_id", ondelete="SET NULL"), nullable=True
     )
-    manager: Mapped["Employee | None "] = relationship(
+    manager: Mapped["Employee | None"] = relationship(
         back_populates="subordinates", remote_side=[employee_id]
     )
     subordinates: Mapped[list["Employee"]] = relationship(

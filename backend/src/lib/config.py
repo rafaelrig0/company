@@ -13,4 +13,4 @@ DATABASE_URL = URL.create(
     database=os.getenv("DB"),
 )
 if not DATABASE_URL:
-    raise RuntimeError("Database URL not found in .env")
+    raise RuntimeError("Database URL not found")
