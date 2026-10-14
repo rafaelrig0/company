@@ -4,6 +4,12 @@ import os
 
 load_dotenv()
 
+CORS_ORIGIN = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "").strip(",")
+    if origin.strip()
+]
+
 DATABASE_URL = URL.create(
     drivername="postgresql",
     username=os.getenv("DB_USER"),
@@ -12,5 +18,6 @@ DATABASE_URL = URL.create(
     port=int(os.getenv("DB_PORT", "5432")),
     database=os.getenv("DB"),
 )
+
 if not DATABASE_URL:
     raise RuntimeError("Database URL not found")

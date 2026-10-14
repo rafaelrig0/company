@@ -32,7 +32,7 @@ class Employee(Base):
     role: Mapped[Role] = mapped_column(
         Enum(Role, name="role"), nullable=False, default=Role.EMPLOYEE
     )
-    password_hash: Mapped[str] = mapped_column(String(150), nullable=False)
+    password: Mapped[str] = mapped_column(String(150), nullable=False)
 
     salary: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), nullable=False)
 
